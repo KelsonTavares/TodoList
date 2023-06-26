@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Tasks</title>
+</head>
+<body>
+    <h1>Edit your task here</h1>
+    <form action="{% url 'tasks:update_task' task.id %}" method="post">
+        {% csrf_token %}
+        <label for="name_task">Name:</label>
+        <input type="text" name="name" id="name_task" value="{{task.name}}"><br><br>
+
+        <label for="category">Category:</label>
+        <select name="category" id="category">
+            <option value="{{task.category.id}}">{{task.category.name}}</option>
+            {% for c in category %}
+                {% if task.category.id != c.id %}
+                    <option value="{{c.id}}"> {{c.name}}</option>
+                {% endif %}
+            {% endfor%}
+        </select><br><br>
+
+        <label for="summary">Summary</label>
+        <input type="text" name="summary" id="summary"><br><br>
+
+        
+
+        <label for="owner">Creator:</label>
+        <select name="owner" id="oner">
+            <option value="{{task.owner.id}}"> {{task.owner.name}}</option>
+        </select><br><br>
+        <input type="submit" value="Save">
+    </form>
+</body>
+</html>

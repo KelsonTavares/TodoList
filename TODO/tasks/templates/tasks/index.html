@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO</title>
+</head>
+<body>
+    <main class="container">
+        <section class="tasks">
+            <a href="{% url 'tasks:login' %}">login</a>
+            <article class="task" id="task_id">
+                {% if  tasks %}
+                    {% for task in tasks %}
+                        <h1>{{ task.name }} <a href="{% url 'tasks:url_edit_task' task.id %}">edit</a> <a href="{% url 'tasks:url_delete_task' task.id %}">delete</a></h1>
+                    {% endfor %}
+
+                {% else %}
+                    <span>Task is empty</span>
+                {% endif %}
+            </article>
+
+            <article class="user">
+                {% if users %}
+                    {% for user in users %}
+                        <h1>{{user.name}} <a href="{% url 'tasks:edit_user' user.id %}">edit</a><a href="{% url 'tasks:url_delete' user.id %}">delete</a></h1> 
+                    {% endfor %}
+                {% else%}
+                    <span>User is empty</span>
+                {% endif %}
+
+            </article>
+        </section>
+        <a href="{% url 'tasks:url_signup' %}">Create User</a>
+        <a href="{% url 'tasks:create_task' %}">Create Task</a>
+    </main>
+</body>
+</html>
