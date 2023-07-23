@@ -15,19 +15,6 @@ class Profile(models.Model):
     
     class Meta:
         verbose_name_plural = 'Profiles'
-    
-class Event(models.Model):
-    name = models.CharField(max_length=100, null=False)
-    owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    alarm = models.CharField(max_length=5, null=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    def __str__(self) -> str:
-        return self.name
-    
-    class Meta:
-        verbose_name_plural = 'Events'
 
 class Task(models.Model):
     name = models.CharField(max_length=100, null=False)
@@ -43,3 +30,17 @@ class Task(models.Model):
     class Meta:
         verbose_name_plural = 'Tasks'
         
+        
+class Event(models.Model):
+    name = models.CharField(max_length=100, null=False)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, null=True)
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    alarm = models.CharField(max_length=5, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self) -> str:
+        return self.name
+    
+    class Meta:
+        verbose_name_plural = 'Events'
