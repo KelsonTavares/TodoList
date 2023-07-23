@@ -9,7 +9,7 @@
 <body>
     <main class="container">
         <section class="tasks">
-            <a href="{% url 'tasks:login' %}">login</a>
+            {% comment %} <a href="{% url 'tasks:login' %}">login</a> {% endcomment %}
             <article class="task" id="task_id">
                 {% if  tasks %}
                     {% for task in tasks %}
@@ -32,8 +32,8 @@
 
             </article>
         </section>
-        <a href="{% url 'tasks:url_signup' %}">Create User</a>
-        <a href="{% url 'tasks:create_task' %}">Create Task</a>
+        {% comment %} <a href="{% url 'tasks:url_signup' %}">Create User</a> {% endcomment %}
+        {% comment %} <a href="{% url 'tasks:create_task' %}">Create Task</a> {% endcomment %}
     </main>
 </body>
 </html>

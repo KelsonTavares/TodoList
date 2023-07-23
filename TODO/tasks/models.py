@@ -1,37 +1,41 @@
 from datetime import datetime
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
-class User(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
+class Profile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     Gender_CHOICES = [ ('M', 'Masculine'), ('F', 'Female'), ('O', 'Other')]
-    gender = models.CharField(max_length=1, choices=Gender_CHOICES)
-    birth = models.DateField()
+    gender = models.CharField(max_length=1, choices=Gender_CHOICES, null=False)
+    birth = models.DateField(null=False)
+    
+    def __str__(self):
+        return f'{self.user.username} Profile'
+    
+    class Meta:
+        verbose_name_plural = 'Profiles'
+    
+class Event(models.Model):
+    name = models.CharField(max_length=100, null=False)
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    alarm = models.CharField(max_length=5, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self) -> str:
         return self.name
     
     class Meta:
-        verbose_name_plural = 'Users'
-    
-class Category(models.Model):
-    name = models.CharField(max_length=100)
-    creation_date = models.DateTimeField(default=datetime.now)
-    
-    def __str__(self) -> str:
-        return self.name
-    
-    class Meta:
-        verbose_name_plural = 'Categorys'
+        verbose_name_plural = 'Events'
 
-class Tasks(models.Model):
-    name = models.CharField(max_length=100)
-    summary = models.CharField(max_length=250)
-    creation_date = models.DateTimeField(auto_created=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+class Task(models.Model):
+    name = models.CharField(max_length=100, null=False)
+    category = models.CharField(max_length=100, null=False)
+    summary = models.CharField(max_length=250, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
     
     def __str__(self) -> str:
         return self.name
@@ -39,10 +43,3 @@ class Tasks(models.Model):
     class Meta:
         verbose_name_plural = 'Tasks'
         
-
-class Login(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    password = models.CharField(max_length=100)
-    
-    def __str__(self) -> str:
-        return self.user

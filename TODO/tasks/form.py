@@ -1,23 +1,28 @@
 #from django.forms import ModelForm, Form
 from django import forms
-from .models import User, Tasks, Login
+from django.contrib.auth.models import User
+from .models import Task, Event, Profile
 
 class UserForm(forms.ModelForm):
-    '''name = forms.CharField(label='Your name', max_length=100)
-    email = forms.CharField(label='Your email', max_length=100)
-    gender = forms.CharField(label='Your gender', max_length=1)
-    birth = forms.DateField(label='Your birth')'''
+    email = forms.EmailField(required=True)
     class Meta:
         model = User
-        fields = ['name','email','gender','birth']
+        fields = ['first_name','last_name','username','email','password']
         
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
 
-class TasksForm(forms.ModelForm):
     class Meta:
-        model = Tasks
-        fields = ['name','summary','category', 'owner','creation_date']
-        
-class LoginForm(forms.ModelForm):
+        model = User
+        fields = ['first_name','last_name','username','email']
+
+class ProfileForm(forms.ModelForm):
     class Meta:
-        model = Login
-        fields = ['user','password']
+        model = Profile
+        fields = ['gender','birth']
+
+
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['name','summary','category', 'owner']
