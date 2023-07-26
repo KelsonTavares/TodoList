@@ -1,0 +1,132 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+}
+
+.titulo{
+    text-align: center;
+    margin: 30px 0;
+    color: #3B4F5E;
+}
+
+.dados_user{
+    width: 58%;
+    background-color: #aeafb0;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 85px 0;
+    border-radius: 5px;
+}
+
+.dados_user form .inputs{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: start;
+    color: #3B4F5E;
+}
+.dados_user form .input{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: start;
+    color: #3B4F5E;
+}
+
+.dados_user form .inputs .set input{
+    width: 270px;
+    height: 42px;
+    border: 1px solid #1f1f1f;
+    border-radius: 5px;
+    background-color: #fff;
+    margin: 5px 0;
+    text-align: left;
+    padding-left: 5px;
+}
+.dados_user form .input .set input{
+    width: 300px;
+    height: 42px;
+    border: 1px solid #1f1f1f;
+    border-radius: 5px;
+    background-color: #fff;
+    margin: 10px 0;
+    text-align: left;
+    padding-left: 5px;
+}
+
+.dados_user form .inputs .set input:focus{
+    border: none;
+}
+.dados_user form .input .set input:focus{
+    border: none;
+}
+
+.dados_user form .inputs .set{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 0 12px;
+}
+
+.dados_user form .input .set{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 0 12px;
+}
+
+.dados_user form .btns{
+    margin-top: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dados_user form .btns .btn{
+    width: 100px;
+    height: 40px;
+    padding: 6px;
+    margin: 0 8px;
+    color: #fff;
+    background-color: #d93d3d;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+.dados_user form .btns a{
+    padding: 10px 25px;
+    margin: 0 8px;
+    background-color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #d93d3d;
+}
+
+.dados_user form .link{
+    margin-top: 20px;
+}
+.dados_user form .link p{
+    text-align: center;
+    color: #3B4F5E;
+}
+.dados_user form .link p a{
+    text-decoration: none;
+    margin-left: 5px;
+    color: #d93d3d;
+}

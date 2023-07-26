@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static '/style.css' %}">
+    <title>Sign up</title>
+</head>
+<body>
+    <div class="dados_user">
+        {% if page == 'signup' %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="titulo">
+                    <h1>Signup</h1>
+                </div>
+                <section class="inputs">
+                        <div class="set">
+                            <label for="name">Firstname:</label>
+                            <input type="text" name="name" id="name" placeholder="Firstname" required>
+                        </div>
+
+                        <div class="set">
+                            <label for="lastname">Lastname:</label>
+                            <input type="text" name="lastname" id="lastname" placeholder="Lastname" required>
+                        </div>
+
+                        <div class="set">
+                            <label for="username">Username:</label>
+                            <input type="text" name="username" id="username" placeholder="Username" required>
+                        </div>
+
+                        <div class="set">
+                            <label for="email">Email:</label>
+                            <input type="email" name="email" id="email" placeholder="kelson@gmail.com" required>
+                        </div class="set">
+
+                        <div class="set">
+                            <label for="gender">Gender:</label>
+                            <input type="text" name="gender" id="gender" maxlength="1" placeholder="M / F" required>
+                        </div>
+
+                        <div class="set">
+                            <label for="birth">Birth:</label>
+                            <input type="date" name="birth" id="birth" required>
+                        </div>
+                        
+                        <div class="set">
+                            <label for="password">Password:</label>
+                            <input type="password" name="password" id="password" placeholder="**********" required>
+                        </div>
+
+                        <div class="set">
+                            <label for="password2">Confirm password:</label>
+                            <input type="password" name="password2" id="password2" placeholder="**********" required>
+                        </div>
+
+                </section>
+
+                <section class="btns">
+                    <a href="{% url 'tasks:signin' %}">Signin</a>
+                    <button type="submit" class="btn">Signup</button>
+                </section>
+            </form>
+        {% else %}
+        
+            <form method="post">
+                {% csrf_token %}
+                <div class="titulo">
+                    <h1>Signin</h1>
+                </div>
+
+                <section class="input">
+                    <div class="set">
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" id="username" placeholder="Username" required>
+                    </div>
+                    <div class="set">
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" id="password" placeholder="**********" required>
+                    </div>
+                </section>
+
+                <section class="link">
+                    <p>Have you got an account?<a href="{% url 'tasks:signup' %}">Signup</a></p>
+                </section>
+                
+                <section class="btns">
+                    <button type="submit" class="btn">Signin</button>
+                </section>
+            </form>
+
+        {% endif %}
+    </div>
+</body>
+</html>

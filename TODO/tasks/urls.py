@@ -4,6 +4,8 @@ from . import views
 app_name = 'tasks' # utiliza-se quando usamos a estrutura 'tasks:index'
 urlpatterns = [
     path('', views.index, name='url_index'),
+    path('signup/', views.signup, name='signup'),
+    path('signin/', views.signin, name='signin'),
     
     # Login and Logout urls
     # path('login/', views.login, name='login'),

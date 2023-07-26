@@ -17,6 +17,13 @@ def index(request):
     #dados = ['Correr','Desporto','Esse e uma actividade muito dinamica e saudavel']
     return render(request, 'tasks/index.html',data)
 
+def signup(request):
+    page = 'signup'
+    return render(request, 'user/form_sig.html',{'page':page})
+
+def signin(request):
+    page = 'login'
+    return render(request, 'user/form_sig.html',{'page':page})
 # create user
 # def create_user(request):
 #     data = {}
