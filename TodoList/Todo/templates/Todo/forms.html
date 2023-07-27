@@ -11,7 +11,7 @@
 <body>
     <div class="dados_user">
         {% if page == 'signup' %}
-            <form method="post">
+            <form method="post" action="{% url 'tasks:cadastro' %}">
                 {% csrf_token %}
                 <div class="titulo">
                     <h1>Signup</h1>
@@ -19,12 +19,12 @@
                 <section class="inputs">
                         <div class="set">
                             <label for="name">Firstname:</label>
-                            <input type="text" name="name" id="name" placeholder="Firstname" required>
+                            <input type="text" name="first_name" id="name" placeholder="Firstname" required>
                         </div>
 
                         <div class="set">
                             <label for="lastname">Lastname:</label>
-                            <input type="text" name="lastname" id="lastname" placeholder="Lastname" required>
+                            <input type="text" name="last_name" id="lastname" placeholder="Lastname" required>
                         </div>
 
                         <div class="set">
@@ -36,16 +36,6 @@
                             <label for="email">Email:</label>
                             <input type="email" name="email" id="email" placeholder="kelson@gmail.com" required>
                         </div class="set">
-
-                        <div class="set">
-                            <label for="gender">Gender:</label>
-                            <input type="text" name="gender" id="gender" maxlength="1" placeholder="M / F" required>
-                        </div>
-
-                        <div class="set">
-                            <label for="birth">Birth:</label>
-                            <input type="date" name="birth" id="birth" required>
-                        </div>
                         
                         <div class="set">
                             <label for="password">Password:</label>
@@ -66,7 +56,7 @@
             </form>
         {% else %}
         
-            <form method="post">
+            <form method="post" action="{% url 'tasks:signin' %}">
                 {% csrf_token %}
                 <div class="titulo">
                     <h1>Signin</h1>
@@ -93,6 +83,9 @@
             </form>
 
         {% endif %}
+        <!-- {% if message %}
+            <p>{{message}}</p>
+        {% endif %} -->
     </div>
 </body>
 </html>
