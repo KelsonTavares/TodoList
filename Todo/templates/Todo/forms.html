@@ -11,7 +11,7 @@
 <body>
     <div class="dados_user">
         {% if page == 'signup' %}
-            <form method="post" action="{% url 'tasks:cadastro' %}">
+            <form method="post" action="{% url 'signup' %}">
                 {% csrf_token %}
                 <div class="titulo">
                     <h1>Signup</h1>
@@ -50,13 +50,13 @@
                 </section>
 
                 <section class="btns">
-                    <a href="{% url 'tasks:signin' %}">Signin</a>
+                    <a href="{% url 'signin' %}">Signin</a>
                     <button type="submit" class="btn">Signup</button>
                 </section>
             </form>
         {% else %}
         
-            <form method="post" action="{% url 'tasks:signin' %}">
+            <form method="post" action="{% url 'signin' %}">
                 {% csrf_token %}
                 <div class="titulo">
                     <h1>Signin</h1>
@@ -74,7 +74,7 @@
                 </section>
 
                 <section class="link">
-                    <p>Have you got an account?<a href="{% url 'tasks:signup' %}">Signup</a></p>
+                    <p>Have you got an account?<a href="{% url 'signup' %}">Signup</a></p>
                 </section>
 
                 <section class="btns">

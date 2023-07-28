@@ -14,3 +14,14 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+        
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['name','summary','category', 'owner']
+        
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['name','task','owner', 'alarm']
