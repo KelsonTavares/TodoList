@@ -26,7 +26,7 @@ def index(request):
     # e = check_password('maria2002', 'pbkdf2_sha256$600000$DyGTkMHx5SJLDOE0pR9oH6$2DN13k6lQdKmYwZSDLlaCnV1jGelaJLQatkWmsjWh9I=')
     # print(e)
     # #print(data['passw'])
-    print(check_password('ravi2000', 'pbkdf2_sha256$600000$4LJV1ICvojox9atabvwgtw$B9i/BeQPPwqFan+JsqzrjaMRkCn2SuzEMi+cv6gQVvU='))
+    #print(check_password('ravi2000', 'pbkdf2_sha256$600000$4LJV1ICvojox9atabvwgtw$B9i/BeQPPwqFan+JsqzrjaMRkCn2SuzEMi+cv6gQVvU='))
     return render(request, 'index.html',data)
 
 def signup(request):
