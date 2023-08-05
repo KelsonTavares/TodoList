@@ -1,32 +1,22 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password, check_password
-# from django.contrib.auth.forms import AuthenticationForm
-# from django.contrib.messages import constants
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-# from django.urls import reverse
-from django.http import HttpResponse
-from .forms import TaskForm, UserForm
+from .forms import TaskForm, UserForm, ProfileForm, EventForm
 from .models import Task, Event, Profile
 # import datetime
 
 # Create your views here.
-
+@login_required(login_url='signin')
 def index(request):
     data = {}
     data['tasks'] = Task.objects.all()
-    data['users'] = User.objects.all()
-    #data['passw'] = check_password('admin','X6AL5TV08PEWo5BAP/tgMx5zgd6TZsbNZ3zXcEWAJfQ=')
-    #dados = ['Correr','Desporto','Esse e uma actividade muito dinamica e saudavel']
-    # b = make_password('admin')
-    # print(b)
-    # c = check_password('admin',b)
-    # print(c)
-    # e = check_password('maria2002', 'pbkdf2_sha256$600000$DyGTkMHx5SJLDOE0pR9oH6$2DN13k6lQdKmYwZSDLlaCnV1jGelaJLQatkWmsjWh9I=')
-    # print(e)
-    # #print(data['passw'])
-    #print(check_password('ravi2000', 'pbkdf2_sha256$600000$4LJV1ICvojox9atabvwgtw$B9i/BeQPPwqFan+JsqzrjaMRkCn2SuzEMi+cv6gQVvU='))
+    data['profile'] = Profile.objects.all()
+    data['events'] = Event.objects.all()
+    data['page'] = 'index'
     return render(request, 'index.html',data)
 
 def signup(request):
@@ -45,13 +35,12 @@ def signup(request):
                 form.save()
                 username = form.cleaned_data.get('username')
                 messages.success(request, f'Account created for {username}')
-                print('Succes in Signup!')
                 return redirect('signin')
             else:
-                print('Passwords are not same!')
+                messages.error(request,'Passwords are not same!')
                 redirect('signup')
         else:
-            print('Form is not valid!')
+            messages.error(request,'The data are not ok!')
             
     else:
         form = UserForm()
@@ -63,10 +52,8 @@ def signin(request):
         return redirect('index')
 
     if request.method == 'POST':
-        username = request.POST.get('username').lower()# Aqui pega o username no request
+        username = request.POST.get('username')# Aqui pega o username no request
         password = request.POST.get('password')# Aqui pega a password no request
-        print(username)
-        print(password)
         
         try:
             user = User.objects.filter(username = username)
@@ -74,20 +61,123 @@ def signin(request):
             # verifica se o usuario existe na base de dados.
         except:
             messages.error(request,'User does not exist')
-            print('User does not exist')
             
         user = authenticate(request, username=username, password=password) # Aqui faz a autenticacao do usuario.
-        print(user)
+
         if user is not None: # Aqui verifica se os dados do usuario estao vaizios ou nao
             login(request, user)# Faz o login
-            print('Logado com sucesso!')
+            messages.success(request,'Signin with sucess!')
             return redirect('index')
         else:
             messages.error(request, 'Username or Password does not exist')
-            print('Username or Password does not exist')
               
     return render(request, 'Todo/forms.html',{'page':page})
 
 def logoutUser(request): # logout method
     logout(request) # Faz o logout
     return redirect('signin')
+
+@login_required(login_url='signin')
+def createTask(request):
+    page = "create"
+    user = User.objects.all()
+    if request.method == "POST":
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Success in creating Task!')
+            return redirect('index')
+        else:
+            messages.error(request,'The data are not ok!')
+    return render(request, 'tasks/forms.html',{'users':user, 'page':page})
+
+@login_required(login_url='signin')
+def updateTask(request,pk):
+    page = "edit"
+    task = Task.objects.get(pk=pk)
+    form = TaskForm(instance = task)
+    
+    if request.user.profile != task.owner:
+        messages.info(request,'Your are not allowed here!')
+    else:
+        if request.method == 'POST': # Aqui verifica se o methodo usado no form e post
+            form = TaskForm(request.POST, instance = task)
+            if form.is_valid():# Aqui verifica se o form e valido
+                form.save()
+                messages.success(request,'Success in updating task!')
+                return redirect('index')
+    return render(request, 'tasks/forms.html', {'task':task, 'page':page})
+
+@login_required(login_url='signin')
+def deleteTask(request, pk):
+    task = Task.objects.get(pk = pk)
+    if request.method == 'POST':
+        task.delete()
+        messages.info(request,'task! deleted!')
+        return redirect('index')
+    
+    return render(request, 'index.html', {'task':task})
+
+@login_required(login_url='signin')
+def profile(request):
+    if request.method == "POST":
+        prof = Profile.objects.get(user = request.user)
+        if prof:
+            messages.info(request,'Pofile already exist!')
+        else:
+            form = ProfileForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request,'Profile was created!')
+                return redirect('index')
+            else:
+                messages.error(request,'The data are not ok!')
+        
+    return render(request, 'todo/profile.html')
+
+@login_required(login_url='signin')
+def createEvent(request, pk):
+    page = 'create'
+    task = Task.objects.get(pk = pk)
+    
+    if request.method == "POST":
+        form = EventForm({
+            'name' : request.POST['name'],
+            'task' : request.POST['task'],
+            'alarm' : request.POST['alarm']
+        })
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Event was created!')
+            return redirect('index')
+        else:
+            messages.error(request,'The data are not ok!')
+        
+    return render(request, 'event/form.html',{'task' : task, 'page':page})
+
+@login_required(login_url='signin')
+def updateEvent(request, pk):
+    page = 'edit'
+    event = Event.objects.get(pk = pk)
+    
+    if request.method == "POST":
+        form = EventForm(request.POST, instance = event)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Success in updating event!')
+            return redirect('index')
+        else:
+            messages.error(request,'The data are not ok!')
+            
+    return render(request, 'index.html', {'event' : event, 'page' : page})
+
+@login_required(login_url='signin')
+def deleteEvent(request, pk):
+    event = Event.objects.get(pk = pk)
+    if request.method == "POST":
+        event.delete()
+        messages.info(request,'Event was deleted!')
+        return redirect('index')
+    
+    return render(request, 'index.html',{'event':event})

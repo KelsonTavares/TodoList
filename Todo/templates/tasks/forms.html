@@ -1,38 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Tasks</title>
-</head>
-<body>
-    <h1>Create your task here</h1>
-    <form action="{% url 'tasks:create_task' %}" method="post">
-        {% csrf_token %}
-        <label for="name_task">Name:</label>
-        <input type="text" name="name" id="name_task"><br><br>
+{% extends 'base/base.html' %}
+{% block title %} Task {% endblock title %}
 
-        <label for="category">Category:</label>
-        <select name="category" id="category">
-            {% for c in category %}
-                <option value="{{c.id}}"> {{c.name}}</option>
-            {% endfor %}
-        </select><br><br>
 
-        <label for="summary">Summary</label>
-        <input type="text" name="summary" id="summary"><br><br>
+{% block content %}
+    <section class="row">
+        <div class="col-md-12">
+            {% if page == "create" %}
+                <form action="{% url 'task' %}" method="post" class="card bg-secondary border-0 mt-3 form">
+                    {% csrf_token %}
+                    <h3 class="card-title text-center text-dark mt-5 mb-3">Create Task</h3>
+                    <div class="card-body d-flex justify-content-center align-items-center flex-column">
 
-        <label for="date">Date of Criation:</label>
-        <input type="date" name="creation_date" id="date"><br><br>
+                    <div>
+                            <label for="owner" class="card-text text-dark">Owner</label>
+                            <select name="owner" id="oner" class="form-control">
+                                <option value="{{request.user.profile.id}}">{{request.user.profile.user}}</option>
+                            </select>
+                    </div>
 
-        <label for="owner">Owner</label>
-        <select name="owner" id="oner">
-            {% for u in user %}
-                <option value="{{u.id}}"> {{u.name}}</option>
-            {% endfor %}
-        </select><br><br>
-        <input type="submit" value="Save">
-    </form>
-</body>
-</html>
+                        <div>
+                            <label for="name_task" class="card-subtitle text-dark">Name</label>
+                            <input type="text" name="name" id="name_task" class="form-control" placeholder="Name here">
+                        </div>
+
+                        <div>
+                            <label for="category" class="card-subtitle text-dark">Category</label>
+                            <select name="category" id="category" class="form-control">
+                                <option value="Desporto">Desporto</option>
+                                <option value="Estudo">Estudo</option>
+                                <option value="Negocio">Negocio</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="summary" class="card-subtitle text-dark">Summary</label>
+                            <input type="text" name="summary" id="summary" class="form-control" placeholder="Summary here">
+                        </div>
+                        
+                        <div class="mb-5 mt-4">
+                            <a href="{% url 'index' %}" class="btn btn-danger mx-3">Cancel</a>
+                            <input type="submit" value="Save" class="btn btn-primary px-4 mx-3">
+                        </div>
+                    </div>
+                </form>
+
+            {% elif page == "edit" %}
+                <form action="{% url 'updateTask' task.id %}" method="post" class="card bg-secondary border-0 mt-3 form">
+                    {% csrf_token %}
+                    <h3 class="card-title text-center text-dark mt-5 mb-3">Edit Task</h3>
+                    <div class="card-body d-flex justify-content-center align-items-center flex-column">
+
+                    <div>
+                            <label for="owner" class="card-text text-dark">Owner</label>
+                            <select name="owner" id="oner" class="form-control">
+                                <option value="{{request.user.profile.id}}">{{request.user.profile.user}}</option>
+                            </select>
+                    </div>
+
+                        <div>
+                            <label for="name_task" class="card-subtitle text-dark">Name</label>
+                            <input type="text" name="name" id="name_task" value="{{task.name}}" class="form-control" placeholder="Name here">
+                        </div>
+
+                        <div>
+                            <label for="category" class="card-subtitle text-dark">Category</label>
+                            <select name="category" id="category" class="form-control">
+                                <option value="Desporto">Desporto</option>
+                                <option value="Estudo">Estudo</option>
+                                <option value="Negocio">Negocio</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="summary" class="card-subtitle text-dark">Summary</label>
+                            <input type="text" name="summary" id="summary" value="{{task.summary}}" class="form-control" placeholder="Summary here">
+                        </div>
+                        
+                        <div class="mb-5 mt-4">
+                            <a href="{% url 'index' %}" class="btn btn-danger mx-3">Cancel</a>
+                            <input type="submit" value="Edit" class="btn btn-primary px-4 mx-3">
+                        </div>
+                    </div>
+                </form>
+                
+            {% endif %}
+        </div>
+    </section>
+{% endblock content %}

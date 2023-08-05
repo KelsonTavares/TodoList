@@ -1,0 +1,42 @@
+{% extends 'base/base.html' %}
+{% block title %} Profile {% endblock title %}
+
+
+{% block content %}
+    <section class="row">
+        <div class="col-md-12">
+            <form action="{% url 'profile' %}" method="post" class="card bg-secondary border-0 mt-3 form">
+                {% csrf_token %}
+                <h3 class="card-title text-center text-dark mt-5 mb-3">Profile</h3>
+                <div class="card-body d-flex justify-content-center align-items-center flex-column">
+
+                    <div>
+                            <label for="user" class="card-text text-dark">Owner</label>
+                            <select name="user" id="user" class="form-control">
+                                <option value="{{ request.user.id }}">{{request.user.username}}</option>
+                            </select>
+                    </div>
+
+                    <div>
+                        <label for="gender" class="card-subtitle text-dark">Gender</label>
+                        <select name="gender" id="gender" class="form-control">
+                            <option value="M">Masculino</option>
+                            <option value="F">Feminio</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="birth" class="card-subtitle text-dark">Birth</label>
+                        <input type="date" name="birth" id="birth" class="form-control">
+                    </div>
+                    
+                    <div class="mb-5 mt-4">
+                        <a href="{% url 'index' %}" class="btn btn-danger mx-3">Cancel</a>
+                        <input type="submit" value="Save" class="btn btn-primary px-4 mx-3">
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </section>
+{% endblock content %}

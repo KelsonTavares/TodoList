@@ -1,0 +1,15 @@
+.link{
+    text-decoration: none;
+    color: #fff;
+}
+/* input[type='text']{
+    width: 320px;
+}
+select{
+    width: 200px;
+} */
+.form-control{
+    width: 310px;
+    height: 50px;
+    margin-bottom: 10px;
+}

@@ -1,0 +1,8 @@
+.nav{
+    height: 83vh;
+}
+
+.navbar-nav .nav-item .link{
+    text-decoration: none;
+    color: #fff;
+}

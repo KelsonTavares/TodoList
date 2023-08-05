@@ -1,0 +1,72 @@
+{% extends 'base/base.html' %}
+{% block title %} Task {% endblock title %}
+
+
+{% block content %}
+    <section class="row">
+        <div class="col-md-12">
+            {% if page == "create" %}
+                <form action="{% url 'createEvent' task.id %}" method="post" class="card bg-secondary border-0 mt-3 form">
+                    {% csrf_token %}
+                    <h3 class="card-title text-center text-dark mt-5 mb-3">Create Event</h3>
+                    <div class="card-body d-flex justify-content-center align-items-center flex-column">
+
+                    <div>
+                            <label for="task" class="card-text text-dark">Task</label>
+                            <select name="task" id="task" class="form-control">
+                                <option value="{{task.id}}">{{task.name}}</option>
+                            </select>
+                    </div>
+
+                        <div>
+                            <label for="name_task" class="card-subtitle text-dark">Name</label>
+                            <input type="text" name="name" id="name_task" class="form-control" placeholder="Name here">
+                        </div>
+
+                        <div>
+                            <label for="alarm" class="card-subtitle text-dark">Alarm</label>
+                            <input type="text" name="alarm" id="alarm" class="form-control" placeholder="9h:24min">
+                        </div>
+
+                        
+                        <div class="mb-5 mt-4">
+                            <a href="{% url 'index' %}" class="btn btn-danger mx-3">Cancel</a>
+                            <input type="submit" value="Save" class="btn btn-primary px-4 mx-3">
+                        </div>
+                    </div>
+                </form>
+
+            {% elif page == "edit" %}
+                <form action="{% url 'updateEvent' event.id %}" method="post" class="card bg-secondary border-0 mt-3 form">
+                    {% csrf_token %}
+                    <h3 class="card-title text-center text-dark mt-5 mb-3">Edit Event</h3>
+                    <div class="card-body d-flex justify-content-center align-items-center flex-column">
+
+                    <div>
+                            <label for="task" class="card-text text-dark">Task</label>
+                            <select name="task" id="task" class="form-control">
+                                <option value="{{ event.task.id }}">{{ event.task.name}}</option>
+                            </select>
+                    </div>
+
+                        <div>
+                            <label for="name_event" class="card-subtitle text-dark">Name</label>
+                            <input type="text" name="name" id="name_event" value="{{event.name}}" class="form-control" >
+                        </div>
+
+                        <div>
+                            <label for="alarm" class="card-subtitle text-dark">Alarm</label>
+                            <input type="text" name="alarm" id="alarm" value="{{ event.alarm }}" class="form-control">
+                        </div>
+                        
+                        <div class="mb-5 mt-4">
+                            <a href="{% url 'index' %}" class="btn btn-danger mx-3">Cancel</a>
+                            <input type="submit" value="Edit" class="btn btn-primary px-4 mx-3">
+                        </div>
+                    </div>
+                </form>
+                
+            {% endif %}
+        </div>
+    </section>
+{% endblock content %}

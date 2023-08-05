@@ -15,13 +15,18 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['username', 'password']
         
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['user', 'gender', 'birth']
+        
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['name','summary','category', 'owner']
+        fields = ['owner', 'name','category','summary']
         
 
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['name','task','owner', 'alarm']
+        fields = ['name','task', 'alarm']
