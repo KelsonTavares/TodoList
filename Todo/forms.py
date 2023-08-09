@@ -18,7 +18,7 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['user', 'gender', 'birth']
+        fields = ['user', 'gender', 'birth','img']
         
 class TaskForm(forms.ModelForm):
     class Meta:

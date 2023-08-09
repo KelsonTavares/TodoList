@@ -9,32 +9,8 @@
     <link rel="stylesheet" href="{% static '/css/other.css' %}">
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body>
-  {% if messages %}
-    {% for message in messages %}
-      
-    {% if message.level == 25 %}
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong class="text-center">{{ message }}</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {% endif %}
-    {% if message.level == 20 %}
-      <div class="alert alert-info alert-dismissible fade show" role="alert">
-        <strong class="text-center">{{ message }}</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {% endif %}
-    {% if message.level == 40 %}
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <strong class="text-center">{{ message }}</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {% endif %}
-
-    {% endfor %}
-  {% endif %}
-
+<body class="bg-secondary">
+  
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow mb-0">
         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#"></a>
         <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,18 +20,25 @@
         <div class="navbar-nav">
           <div class="nav-item text-nowrap mb-3 pt-1">
             {% if request.user.is_authenticated %}
-                <a class="px-1 link" href="#">{{request.user}}</a>
-                <a href="{% url 'logout' %}" class="px-3 link">Sign out</a>
-            {% else %}
-                <a href="{% url 'signin' %}" class="px-3 link">Login</a>
-            {% endif %}
+        {% if request.user.profile.img %}
+        <!-- {{ request.user.profile.img }} -->
+            <!-- <a href="#" class="px-1 link">{{ request.user.profile.img.url }}</a> -->
+            <img src="{% static '{{request.user.profile.img.url}}' %}" alt="profile img" srcset="{{ request.user.profile.img.url }}" width="35" height="35" class="rounded-circle mt-1">
+        {% else %}
+            <a href="#" class="px-1 link">Ola</a>
+        {% endif %}
+        <a class="px-1 link" href="#">{{request.user}}</a>
+        <a href="{% url 'logout' %}" class="px-3 link">Sign out</a>
+    {% else %}
+        <a href="{% url 'signin' %}" class="px-3 link">Login</a>
+    {% endif %}
           </div>
         </div>
     </header>
 
     <div class="container-fluid mt-0">
         <div class="row">
-            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse pb-3">
                 <div class="position-sticky pt-3 sidebar-sticky">
                   <ul class="nav flex-column">
                     <li class="nav-item">
@@ -73,7 +56,7 @@
 
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link text-center mb-4 text-light" href="#">
+                      <a class="nav-link text-center mb-4 text-light" href="{% url 'about' %}">
                         <span data-feather="shopping-cart" class="align-text-bottom"></span>
                         About
                       </a>
@@ -84,14 +67,14 @@
                         
                       </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                          <li><a class="dropdown-item" href="#">See</a></li>
+                          <li><a class="dropdown-item" href="{% url 'show_profile' %}">See</a></li>
                           <li><a class="dropdown-item" href="{% url 'profile' %}">Create</a></li>
                         </ul>
                       
                     </li>
                   </ul>
           
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
+                    <h6 class="sidebar-heading d-flex justify-content-center align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
                      <span class="text-light">&copy;DomingosCesar</span>
                     </h6>
                  
@@ -99,7 +82,34 @@
             
             </nav>
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-secondary text-light">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 text-light">
+              {% if messages %}
+                {% for message in messages %}
+                  
+                  {% if message.level == 25 %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                      <strong class="text-center">{{ message }}</strong>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                  {% endif %}
+
+                  {% if message.level == 20 %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                      <strong class="text-center">{{ message }}</strong>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                  {% endif %}
+
+                  {% if message.level == 40 %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                      <strong class="text-center">{{ message }}</strong>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                  {% endif %}
+            
+                {% endfor %}
+            {% endif %}
+          
                 {% block content %}
                 {% endblock %}
             </main>
@@ -108,10 +118,16 @@
     </div>    
     <!-- <script src="{% static 'bootstrap5/js/bootstrap.min.js' %}"></script> -->
     <script src="{% static 'bootstrap5/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery.js' %}"></script>
     <script>
-      var alertNode = document.querySelector('.alert')
+      /*var alertNode = document.querySelector('.alert')
       var alert = bootstrap.Alert.getInstance(alertNode)
-      alert.close()
+      alert.close()*/
+      setTimeout(function () {
+
+        // Closing the alert
+        $('.alert').alert('close');
+    }, 5000);
     </script>
 </body>
 </html>

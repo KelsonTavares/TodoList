@@ -5,8 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from .forms import TaskForm, UserForm, ProfileForm, EventForm
 from .models import Task, Event, Profile
+from notifications.signals import notify
 # import datetime
 
 # Create your views here.
@@ -120,26 +122,50 @@ def deleteTask(request, pk):
 
 @login_required(login_url='signin')
 def profile(request):
+    page = "create"
     if request.method == "POST":
-        prof = Profile.objects.get(user = request.user)
-        if prof:
-            messages.info(request,'Pofile already exist!')
+        # prof = Profile.objects.get(user = request.user)
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Profile was created!')
+            return redirect('index')
         else:
-            form = ProfileForm(request.POST)
-            if form.is_valid():
-                form.save()
-                messages.success(request,'Profile was created!')
-                return redirect('index')
-            else:
-                messages.error(request,'The data are not ok!')
+            messages.error(request,'The data are not ok!')
         
-    return render(request, 'todo/profile.html')
+    return render(request, 'todo/profile.html', {'page' : page})
+
+@login_required(login_url='signin')
+def EditProfile(request, pk):
+    page = "edit"
+    prof = Profile.objects.get(pk = pk)
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES, instance = prof)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Success in updating your Profile!')
+            return redirect('index')
+        else:
+            messages.error(request,'The data are not ok!')
+            
+    return render(request, 'todo/profile.html', {'profile' : prof, 'page' : page})
+
+@login_required(login_url='signin')
+def Show_P(request):
+    profile = Profile.objects.get(pk = request.user.profile)
+    # key = request.user.password
+    # c = Cipher(algorithms.AES(key), modes.CTR(key[:len(key)-1]))
+    return render(request, 'Todo/profile.html',{'profile' : profile})
 
 @login_required(login_url='signin')
 def createEvent(request, pk):
     page = 'create'
     task = Task.objects.get(pk = pk)
-    
+    # event = Event.objects.get(pk = task.event.id)
+    # if event:
+    #     messages.info(request, 'This task already has an event!')
+    #     return redirect('index')
+        
     if request.method == "POST":
         form = EventForm({
             'name' : request.POST['name'],
@@ -181,3 +207,24 @@ def deleteEvent(request, pk):
         return redirect('index')
     
     return render(request, 'index.html',{'event':event})
+
+@login_required(login_url='signin')
+def about(request):
+    return render(request, 'Todo/about.html')
+
+
+@login_required(login_url='signin')
+def notification(request):
+    try:
+        if request.method == 'POST':
+            event = Event.objects.all()
+            receiver = User.objects.get(id=request.user.id)
+            for eve in event:
+                if int(eve.alarm[:2]) == 10:
+                    notify.send(eve, recipient=receiver, verb='Message', description=request.POST.get('message'))
+            return redirect('index')
+        else:
+            return HttpResponse("Invalid request")
+    except Exception as e:
+        print(e)
+    return render(request, 'index.html')

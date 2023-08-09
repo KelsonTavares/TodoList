@@ -4,8 +4,9 @@
 
 {% block content %}
     <section class="row">
+       {% if page == 'create'%}
         <div class="col-md-12">
-            <form action="{% url 'profile' %}" method="post" class="card bg-secondary border-0 mt-3 form">
+            <form action="{% url 'profile' %}" method="post" enctype="multipart/form-data" class="card bg-secondary border-0 mt-3 form">
                 {% csrf_token %}
                 <h3 class="card-title text-center text-dark mt-5 mb-3">Profile</h3>
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
@@ -29,6 +30,11 @@
                         <label for="birth" class="card-subtitle text-dark">Birth</label>
                         <input type="date" name="birth" id="birth" class="form-control">
                     </div>
+
+                    <div>
+                        <label for="img" class="card-subtitle text-dark">Image</label>
+                        <input type="file" name="img" id="img" class="form-control">
+                    </div>
                     
                     <div class="mb-5 mt-4">
                         <a href="{% url 'index' %}" class="btn btn-danger mx-3">Cancel</a>
@@ -38,5 +44,114 @@
             </form>
 
         </div>
+
+
+        {% elif page == 'edit'%}
+        <div class="col-md-12">
+            <form action="{% url 'editprofile' profile.id %}" method="post" enctype="multipart/form-data" class="card bg-secondary border-0 mt-3 form">
+                {% csrf_token %}
+                <h3 class="card-title text-center text-dark mt-5 mb-3">Edit Profile</h3>
+                <div class="card-body d-flex justify-content-center align-items-center flex-column">
+
+                    <div>
+                            <label for="user" class="card-text text-dark">Owner</label>
+                            <select name="user" id="user" class="form-control">
+                                <option value="{{ profile.id }}">{{profile.user.username}}</option>
+                            </select>
+                    </div>
+
+                    <div>
+                        <label for="gender" class="card-subtitle text-dark">Gender</label>
+                        <select name="gender" id="gender" class="form-control">
+                            {% if profile.gender == 'M' %}
+                                <option value="{{ profile.gender }}">Male</option>
+                            {% else %}
+                                <option value="{{ profile.gender }}">Female</option>
+                            {% endif %}
+                            
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="birth" class="card-subtitle text-dark">Birth</label>
+                        <input type="date" name="birth" id="birth" class="form-control" value="{{ profile.birth }}">
+                    </div>
+
+                    <div>
+                        <label for="img" class="card-subtitle text-dark">Image : {{ profile.img }} </label>
+                        <input type="file" name="img" id="img" class="form-control">
+                    </div>
+                    
+                    <div class="mb-5 mt-4">
+                        <a href="{% url 'index' %}" class="btn btn-danger mx-3">Cancel</a>
+                        <input type="submit" value="Save" class="btn btn-primary px-4 mx-3">
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+
+
+        {% else %}
+            <div class="col-md-12">
+                <h3 class="card-title text-center text-dark mt-5 mb-3">Profile</h3>
+                <div class="">
+                    <form class="d-flex flex-column justify-content-center align-items-center" enctype="multipart/form-data">
+                        <div class="d-flex flex-row flex-wrap">
+                            <div class="mx-3">
+                                <label for="firstname">First name</label>
+                                <input type="text" id="firstname" value="{{ profile.user.first_name }}" class="form-control" readonly>
+                            </div>
+        
+                            <div class="mx-3">
+                                <label for="second_name">Second name</label>
+                                <input type="text" id="second_name" value="{{ profile.user.last_name }}" class="form-control" readonly>
+                            </div>
+        
+                        </div>
+    
+                        <div class="d-flex flex-row flex-wrap">
+                            <div class="mx-3">
+                                <label for="name">UserName</label>
+                                <input type="text" id="firstname" value="{{ profile.user.username }}" class="form-control" readonly>
+                            </div>
+        
+                            <div class="mx-3">
+                                <label for="email">E-mail</label>
+                                <input type="text" id="firstname" value="{{ profile.user.email }}" class="form-control" readonly>
+                            </div>
+                        </div>
+    
+                        <div class="d-flex flex-row flex-wrap">
+
+                            <div class="mx-3">
+                                <label for="gender">Gender</label>
+                                {% if profile.gender == "M" %}
+                                    <input type="text" id="firstname" value="Masculino" class="form-control" readonly>
+                                {% else %}
+                                    <input type="text" id="firstname" value="Feminino" class="form-control" readonly>
+                                {% endif %}
+                            </div>
+
+                            <div class="mx-3">
+                                <label for="birth">Birth</label>
+                                <input type="text" id="birth" name = "birth" value="{{ profile.birth }}" class="form-control" readonly>
+                            </div>
+
+                            <div class="mx-3">
+                                <label for="img">Image</label>
+                                <img src="{{ profile.img }}" id="img" value="{{ profile.birth }}" class="form-control" readonly>
+                            </div>
+
+                            
+                        </div>
+
+                        
+                    </form>
+
+                </div>
+            </div>
+       {% endif %}
     </section>
 {% endblock content %}

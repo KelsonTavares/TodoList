@@ -1,7 +1,6 @@
 {% extends 'base/base.html' %}
-
+</head>
 {% block title %} Todo {% endblock title %}
-
 
 {% block content %}
     <section class="row">
@@ -69,89 +68,97 @@
                 <div class="col-md-5">
                     <h2 class="text-center mt-5">Events</h2>
                     <article>
-                        {% for task in tasks %}
-                            {% for event in events %}
-                                {% if task.id == event.task.id %}
-                                    <div class="card  mb-3">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-content-center justify-content-center mb-2">
-                                                <h5 class="card-title text-dark">{{ event.name }}</h5>
-                                                <h5 class="card-title text-dark">{{ event.task.name }}</h5>
-                                                <h6 class="card-text text-dark">{{ event.alarm }}</h6>
-                                            </div>
-                                            <div>
+                        
+                            {% for task in tasks %}
+                                {% if request.user.profile.id == task.owner.id %}
+                                    {% if events %}
+                                        {% for event in events %}
+                                            {% if task.id == event.task.id %}
+                                                <!-- <h5 class="text-dark">{{ task.id }} - {{ event.task.id }}</h5> -->
+                                                <div class="card  mb-3">
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between align-content-center justify-content-center mb-2">
+                                                            <h5 class="card-title text-dark">{{ event.name }}</h5>
+                                                            <h5 class="card-title text-dark">{{ event.task.name }}</h5>
+                                                            <h6 class="card-text text-dark">{{ event.alarm }}</h6>
+                                                        </div>
+                                                        <div>
 
-                                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#EditEvent">
-                                                    Edit
-                                                </button>
-                                                <div class="modal fade" id="EditEvent" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <form action="{% url 'updateEvent' event.id %}" method="post">
-                                                                {% csrf_token %}
-                                                                    <div class="modal-header">
-                                                                        <h1 class="modal-title fs-5 text-dark text-center" id="staticBackdropLabel">Edit Event</h1>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div>
-                                                                            <label for="task" class="card-text text-dark">Task</label>
-                                                                            <select name="task" id="task" class="form-control">
-                                                                                <option value="{{ event.task.id }}">{{ event.task.name}}</option>
-                                                                            </select>
-                                                                        </div>
-                                                
-                                                                        <div>
-                                                                            <label for="name_event" class="card-subtitle text-dark">Name</label>
-                                                                            <input type="text" name="name" id="name_event" value="{{event.name}}" class="form-control" >
-                                                                        </div>
-                                                
-                                                                        <div>
-                                                                            <label for="alarm" class="card-subtitle text-dark">Alarm</label>
-                                                                            <input type="text" name="alarm" id="alarm" value="{{ event.alarm }}" class="form-control">
-                                                                        </div>
-                                                                        
-                                                                    </div>
+                                                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#EditEvent">
+                                                                Edit
+                                                            </button>
+                                                            <div class="modal fade" id="EditEvent" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <form action="{% url 'updateEvent' event.id %}" method="post">
+                                                                            {% csrf_token %}
+                                                                                <div class="modal-header">
+                                                                                    <h1 class="modal-title fs-5 text-dark text-center" id="staticBackdropLabel">Edit Event</h1>
+                                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    <div>
+                                                                                        <label for="task" class="card-text text-dark">Task</label>
+                                                                                        <select name="task" id="task" class="form-control">
+                                                                                            <option value="{{ event.task.id }}">{{ event.task.name}}</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                            
+                                                                                    <div>
+                                                                                        <label for="name_event" class="card-subtitle text-dark">Name</label>
+                                                                                        <input type="text" name="name" id="name_event" value="{{event.name}}" class="form-control" >
+                                                                                    </div>
+                                                            
+                                                                                    <div>
+                                                                                        <label for="alarm" class="card-subtitle text-dark">Alarm</label>
+                                                                                        <input type="text" name="alarm" id="alarm" value="{{ event.alarm }}" class="form-control">
+                                                                                    </div>
+                                                                                    
+                                                                                </div>
 
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                        <button type="submit" class="btn btn-primary">Save</button>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                                                </div>
+                                                                        </form>
                                                                     </div>
-                                                            </form>
+                                                                </div>
+                                                            </div>
+                                
+
+                                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteEvent">
+                                                                Delete
+                                                            </button>
+                                                            <div class="modal fade" id="deleteEvent" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <form action="{% url 'deleteEvent' event.id %}" method="post">
+                                                                            {% csrf_token %}
+                                                                                <div class="modal-header">
+                                                                                    <h1 class="modal-title fs-5 text-dark text-center" id="staticBackdropLabel">Delete Event</h1>
+                                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    <h5 class="text-dark">Are you sure to delete this event?</h5>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                                                </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                     
-
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteEvent">
-                                                    Delete
-                                                </button>
-                                                <div class="modal fade" id="deleteEvent" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <form action="{% url 'deleteEvent' event.id %}" method="post">
-                                                                {% csrf_token %}
-                                                                    <div class="modal-header">
-                                                                        <h1 class="modal-title fs-5 text-dark text-center" id="staticBackdropLabel">Delete Event</h1>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <h5 class="text-dark">Are you sure to delete this event?</h5>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                                                    </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <span>You have no any event created</span>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
-                        {% endfor %}
                     </article>
                 </div>
 

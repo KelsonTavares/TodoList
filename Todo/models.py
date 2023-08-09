@@ -7,6 +7,7 @@ class Profile(models.Model):
     Gender_CHOICES = [ ('M', 'Masculine'), ('F', 'Female'), ('O', 'Other')]
     gender = models.CharField(max_length=1, choices=Gender_CHOICES, null=False)
     birth = models.DateField(null=False)
+    img = models.ImageField(null=True, blank=True, upload_to='images/')
     
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -31,7 +32,7 @@ class Task(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=100, null=False)
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, null=False)
+    task = models.OneToOneField(Task, on_delete=models.CASCADE, null=False)
     alarm = models.CharField(max_length=5, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
