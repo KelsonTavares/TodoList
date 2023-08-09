@@ -25,7 +25,7 @@
             <!-- <a href="#" class="px-1 link">{{ request.user.profile.img.url }}</a> -->
             <img src="{% static '{{request.user.profile.img.url}}' %}" alt="profile img" srcset="{{ request.user.profile.img.url }}" width="35" height="35" class="rounded-circle mt-1">
         {% else %}
-            <a href="#" class="px-1 link">Ola</a>
+            <span>You have no image</span>
         {% endif %}
         <a class="px-1 link" href="#">{{request.user}}</a>
         <a href="{% url 'logout' %}" class="px-3 link">Sign out</a>
